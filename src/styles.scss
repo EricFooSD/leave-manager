@@ -1,3 +1,15 @@
 body {
-  background-color: pink;
+  background-color: rgb(140, 180, 233);
+  font-family: "Source Sans Pro", sans-serif;
+}
+
+#item-container {
+  margin: 10px 0px 10px 0px;
+  border-color: black;
+  padding: 10px;
+  border-style: solid;
+}
+
+#table-foot {
+  font-weight: 900;
 }
