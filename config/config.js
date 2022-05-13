@@ -1,6 +1,6 @@
 module.exports = {
   development: {
-    username: '<YOUR_USER_NAME>',
+    username: 'Eric',
     password: null,
     database: '<YOUR_APP_NAME>_development',
     host: '127.0.0.1',
