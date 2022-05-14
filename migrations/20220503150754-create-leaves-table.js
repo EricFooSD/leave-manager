@@ -1,26 +1,22 @@
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('people', {
+    await queryInterface.createTable('leaves', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER,
       },
-      name: {
+      member_id: {
         allowNull: false,
-        type: Sequelize.STRING,
-      },
-      amount: {
-        allowNull: false,
-        type: Sequelize.DECIMAL(10, 2),
-      },
-      bill_id: {
         type: Sequelize.INTEGER,
         references: {
-          model: 'bills',
+          model: 'users',
           key: 'id',
         },
+      },
+      balance: {
+        type: Sequelize.JSON,
       },
       created_at: {
         allowNull: false,
@@ -34,6 +30,6 @@ module.exports = {
   },
 
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('people');
+    await queryInterface.dropTable('leaves');
   },
 };

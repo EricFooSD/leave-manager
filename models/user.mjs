@@ -1,5 +1,5 @@
-export default function personModel(sequelize, DataTypes) {
-  return sequelize.define('person', {
+export default function userModel(sequelize, DataTypes) {
+  return sequelize.define('user', {
     id: {
       allowNull: false,
       autoIncrement: true,
@@ -10,16 +10,13 @@ export default function personModel(sequelize, DataTypes) {
       allowNull: false,
       type: DataTypes.STRING,
     },
-    amount: {
+    password: {
       allowNull: false,
-      type: DataTypes.DECIMAL(10, 2),
+      type: DataTypes.STRING,
     },
-    billId: {
+    role: {
+      allowNull: false,
       type: DataTypes.INTEGER,
-      references: {
-        model: 'bills',
-        key: 'id',
-      },
     },
     createdAt: {
       allowNull: false,

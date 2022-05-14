@@ -1,18 +1,21 @@
-export default function billModel(sequelize, DataTypes) {
-  return sequelize.define('bill', {
+export default function leaveModel(sequelize, DataTypes) {
+  return sequelize.define('leave', {
     id: {
       allowNull: false,
       autoIncrement: true,
       primaryKey: true,
       type: DataTypes.INTEGER,
     },
-    name: {
+    member_id: {
       allowNull: false,
-      type: DataTypes.STRING,
+      type: DataTypes.INTEGER,
+      references: {
+        model: 'users',
+        key: 'id',
+      },
     },
-    total: {
-      allowNull: false,
-      type: DataTypes.DECIMAL(10, 2),
+    balance: {
+      type: DataTypes.JSON,
     },
     createdAt: {
       allowNull: false,

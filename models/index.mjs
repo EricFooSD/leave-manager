@@ -2,6 +2,10 @@ import { Sequelize } from 'sequelize';
 import url from 'url';
 import allConfig from '../config/config.js';
 
+import requestModel from './request.mjs';
+import userModel from './user.mjs';
+import leaveModel from './leave.mjs';
+
 const env = process.env.NODE_ENV || 'development';
 
 const config = allConfig[env];
@@ -29,6 +33,19 @@ if (env === 'production') {
 } else {
   sequelize = new Sequelize(config.database, config.username, config.password, config);
 }
+
+db.Request = requestModel(sequelize, Sequelize.DataTypes);
+db.Leave = leaveModel(sequelize, Sequelize.DataTypes);
+db.User = userModel(sequelize, Sequelize.DataTypes);
+
+db.User.belongsTo(db.Request);
+db.Request.hasMany(db.User);
+
+db.User.belongsTo(db.Leave);
+db.Leave.hasMany(db.User);
+
+// in order for the many-to-many to work we must mention the join table here.
+db.User.belongsToMany(db.User, { through: 'member_leader' });
 
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;
