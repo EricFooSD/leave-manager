@@ -1,59 +1,129 @@
+/* eslint-disable jsx-a11y/alt-text */
 /* eslint-disable max-len */
 import React, { useState } from 'react';
+import moment from 'moment';
 
-import BillForm from './components/BillForm.jsx';
+import LoginForm from './components/LoginForm.jsx';
+import Account from './components/Account.jsx';
 import Form from './components/Form.jsx';
-import NewBill from './components/NewBill.jsx';
+import Table from './components/Table.jsx';
+import LeaderAccount from './components/LeaderAccount.jsx';
+
+moment().format();
 
 export default function App() {
-  const [bill, setBill] = useState({});
-  const [items, setItems] = useState([]);
-  const [people, setPeople] = useState([]);
+  // ================================
+  //             STATES
+  // ================================
 
-  const createBill = (newBill) => {
-    console.log('bill created');
-    setBill({ ...bill, ...newBill });
+  // States to store data
+  const [user, setUser] = useState({});
+  const [balance, setBalance] = useState({});
+  const [requests, setRequests] = useState([]);
+  const [teamBalance, setTeamBalance] = useState([]);
+
+  // States to show / hide Create Request Form component
+  const [showCreate, setShowCreate] = useState(false);
+
+  // ================================
+  //          HELPER FUNCTIONS
+  // ================================
+
+  // to toggle show / hide form
+  const toggleForm = () => {
+    setShowCreate(!showCreate);
   };
 
-  const createItemList = (newItem) => {
-    console.log('new item added');
-    const newBill = { ...bill };
-    newBill.total += Number(newItem.price);
-    setItems([...items, newItem]);
-    setBill({ ...bill, ...newBill });
+  // check to determine if to show the Create Request button
+  const renderCreateButton = () => {
+    // only show button then user is a Member
+    if (Object.keys(user).length !== 0 && user.role === 1) {
+      return (
+        <div className="d-grid gap-2">
+          <button className="btn btn-dark" type="button" onClick={toggleForm}>
+            Create Request
+          </button>
+        </div>
+      );
+    }
   };
 
-  const createPersonList = (newPerson) => {
-    console.log('new person added');
-    setPeople([...people, newPerson]);
+  // update User state that is used to store data on logged in user details
+  const updateUser = (userInfo) => {
+    console.log('user details stored in State');
+    // console.log('userInfo', userInfo);
+    setUser({ ...user, ...userInfo });
   };
 
-  const updatePersonList = (newList) => {
-    console.log('people list updated');
-    setPeople(newList);
+  // update Balance state that is used to store data on leave balance of Member
+  const updateBalance = (balanceInfo) => {
+    console.log('balance details stored in State');
+    setBalance({ ...balance, ...balanceInfo });
   };
 
-  // element when user first lands on page
-  if (Object.keys(bill).length === 0) {
+  // update Team Balance state that is used to store data all leave balances of Leader's team
+  const updateTeamBalance = (teamInfo) => {
+    console.log('Team balance stored in State');
+    teamInfo.sort((a, b) => ((b.id < a.id) ? 1 : -1));
+    setTeamBalance([...teamInfo]);
+  };
+
+  // update Request state that is used to store data on all requests
+  const updateRequestList = (existingRequests) => {
+    existingRequests.sort((a, b) => ((b.dates < a.dates) ? 1 : -1));
+    console.log('updating request list', existingRequests);
+    setRequests([...existingRequests]);
+  };
+
+  // to determing which account dashboard component to render (Leader or Member)
+  const renderAccount = () => {
+    if (user.role === 1) {
+      return (
+        <div>
+          <h4>
+            Leave entitlement
+          </h4>
+          <div className="col-12 col-md-6 col-lg-4 col-xl-3">
+            <Account user={user} balance={balance} />
+          </div>
+        </div>
+      );
+    } if (user.role === 2) {
+      return (<LeaderAccount user={user} teamBalance={teamBalance} />);
+    }
+    return (<div>Error</div>);
+  };
+
+  // ================================
+  //       RENDERING OF COMPONENT
+  // ================================
+
+  // if user is not logged in, display login component
+  if (Object.keys(user).length === 0) {
     return (
-      <BillForm createBill={createBill} />
+      <LoginForm updateUser={updateUser} updateBalance={updateBalance} updateRequestList={updateRequestList} updateTeamBalance={updateTeamBalance} />
     );
   }
 
   return (
-    <div id="splitter-container" className="container-sm">
+    <div id="main-container" className="container-sm">
       <div className="text-center">
-        <h2>
-          Bill Splitter For:
-          {' '}
-          {bill.name}
-        </h2>
+        <img
+          src={`/images/${user.picture}`}
+          className="rounded-circle img-fluid"
+          height="90"
+          width="90"
+        />
+      </div>
+      <div id="dashboard-container" className="container-sm">
+        {renderAccount()}
       </div>
       <div id="form-container" className="container-sm">
-        <Form createItem={createItemList} createPerson={createPersonList} />
+        {renderCreateButton()}
+        {showCreate ? <Form user={user} toggleForm={toggleForm} updateRequestList={updateRequestList} updateBalance={updateBalance} /> : <></>}
       </div>
-      <div id="new-bill-container" className="container-sm">
-        <NewBill items={items} people={people} updatePeopleList={updatePersonList} bill={bill} createBill={createBill} />
+      <div id="request-container" className="container-sm">
+        <Table user={user} requests={requests} updateRequestList={updateRequestList} updateBalance={updateBalance} updateTeamBalance={updateTeamBalance} />
       </div>
     </div>
   );

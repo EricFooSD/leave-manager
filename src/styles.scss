@@ -1,15 +1,60 @@
 body {
-  background-color: rgb(140, 180, 233);
-  font-family: "Source Sans Pro", sans-serif;
+  background-color: #fbe6c2;
+  font-family: "Handlee", cursive;
+  font-weight: bold;
+  font-size: 18px;
 }
 
-#item-container {
+h1 {
+  font-family: "Rock Salt", cursive;
+}
+
+p {
+  margin: auto;
+}
+
+#dashboard-container {
   margin: 10px 0px 10px 0px;
   border-color: black;
   padding: 10px;
   border-style: solid;
 }
 
-#table-foot {
-  font-weight: 900;
+#form-container {
+  margin: 10px 0px 10px 0px;
+  border-color: black;
+  padding: 10px;
+  // border-style: solid;
+}
+
+#create-request-container {
+  margin: 10px 0px 10px 0px;
+  padding: 10px;
+}
+
+#newtable {
+  text-align: center;
+  max-width: 100vw;
+  font-size: 14px;
+}
+
+@media (min-width: 768px) {
+  #newtable {
+    font-size: 18px;
+  }
+}
+
+#leave-container {
+  margin: 10px 0px 10px 0px;
+  background-color: #f0c929;
+  border-color: black;
+  padding: 10px;
+  border-style: solid;
+}
+
+#request-container {
+  margin: 10px 0px 10px 0px;
+  border-color: black;
+  padding: 10px;
+  // border-style: solid;
 }

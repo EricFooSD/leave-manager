@@ -6,7 +6,7 @@ export default function leaveModel(sequelize, DataTypes) {
       primaryKey: true,
       type: DataTypes.INTEGER,
     },
-    member_id: {
+    userId: {
       allowNull: false,
       type: DataTypes.INTEGER,
       references: {

@@ -1,63 +1,86 @@
+/* eslint-disable react/no-array-index-key */
 /* eslint-disable react/prop-types */
 import React, { useState } from 'react';
+import axios from 'axios';
 
 // form to create new Bill
-export default function Form({ createItem, createPerson }) {
-  const [item, setItem] = useState('');
-  const [price, setPrice] = useState('');
-  const [person, setPerson] = useState('');
+export default function Form({
+  user, toggleForm, updateRequestList, updateBalance,
+}) {
+  // ================================
+  //             STATES
+  // ================================
+  const [date, setDate] = useState('');
+  const [leaveType, setLeaveType] = useState('');
+  const [comment, setComment] = useState('');
 
-  // functions for items
-  const createItemList = () => {
-    createItem({
-      name: item,
-      price: Number(price),
-    });
-    setPrice('');
-    setItem('');
+  // ================================
+  //          HELPER FUNCTIONS
+  // ================================
+
+  const handleChangeDate = (event) => {
+    const newDate = event.target.value;
+    setDate(newDate);
   };
 
-  const handleChangeItem = (event) => {
-    const newItem = event.target.value;
-    setItem(newItem);
+  const handleChangeLeaveType = (event) => {
+    const newLeaveType = event.target.value;
+    setLeaveType(newLeaveType);
   };
 
-  const handleChangePrice = (event) => {
-    const newPrice = event.target.value;
-    setPrice(newPrice);
+  const handleChangeComment = (event) => {
+    const newComment = event.target.value;
+    setComment(newComment);
   };
 
-  // functions for person
-
-  const createPersonList = () => {
-    createPerson({
-      name: person,
-      amount: 0,
-    });
-    setPerson('');
+  // AJAX calls when creating a new leave request
+  const createRequest = () => {
+    axios
+    // posting into request DB
+      .post('/postRequest', {
+        user, date, leaveType, comment,
+      })
+      .then((response) => {
+        console.log('request created in DB');
+        toggleForm();
+        // get updated list of requests
+        axios
+          .post('/getRequests', user)
+          .then((response2) => {
+            updateRequestList(response2.data.allExistingRequests[0]);
+            // get updated leave balance
+            axios
+              .post('/getLeavebalance', user)
+              .then((response3) => {
+                updateBalance({ ...response3.data.leaveBalance.balance }); });
+          });
+      })
+      .catch((error) => { console.log(error); });
   };
 
-  const handleChangePerson = (event) => {
-    const newPerson = event.target.value;
-    setPerson(newPerson);
-  };
-
-  // return of React component
+  // ================================
+  //       RENDERING OF COMPONENT
+  // ================================
   return (
-    <div id="create-form-container" className="container-sm">
+    <div id="create-request-container" className="container-sm">
       <div className="row" id="item-price-form">
         <div className="input-group">
-          <input id="item-input" type="text" placeholder="Item Input" className="form-control" value={item} onChange={handleChangeItem} />
-          <input id="price-input" type="number" placeholder="Price Input" className="form-control" value={price} onChange={handleChangePrice} />
-          <button className="btn btn-dark" type="button" onClick={createItemList}>
-            Submit
-          </button>
+          <input id="date-input" type="date" className="form-control" value={date} onChange={handleChangeDate} />
         </div>
-      </div>
-      <div className="row" id="person-form">
         <div className="input-group">
-          <input id="person-input" type="text" placeholder="Person Input" className="form-control" value={person} onChange={handleChangePerson} />
-          <button className="btn btn-dark" type="button" onClick={createPersonList}>
+          <select id="leave-input" type="text" placeholder="Type of Leave" className="form-select" value={leaveType} onChange={handleChangeLeaveType}>
+            <option>Please Choose Type of Leave</option>
+            <option value="AL">Annual Leave</option>
+            <option value="SL">Sick Leave</option>
+            <option value="ML">Marriage Leave</option>
+            <option value="CL">Childcare Leave</option>
+          </select>
+        </div>
+        <div className="input-group">
+          <input id="comment-input" type="text" placeholder="Comments" className="form-control" value={comment} onChange={handleChangeComment} />
+        </div>
+        <div className="input-group">
+          <button className="btn btn-success" type="button" onClick={createRequest}>
             Submit
           </button>
         </div>

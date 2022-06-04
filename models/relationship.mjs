@@ -1,12 +1,12 @@
-export default function requestModel(sequelize, DataTypes) {
-  return sequelize.define('request', {
+export default function relationshipModel(sequelize, DataTypes) {
+  return sequelize.define('relationship', {
     id: {
       allowNull: false,
       autoIncrement: true,
       primaryKey: true,
       type: DataTypes.INTEGER,
     },
-    userId: {
+    memberId: {
       allowNull: false,
       type: DataTypes.INTEGER,
       references: {
@@ -21,22 +21,6 @@ export default function requestModel(sequelize, DataTypes) {
         model: 'users',
         key: 'id',
       },
-    },
-    dates: {
-      allowNull: false,
-      type: DataTypes.STRING,
-    },
-    leaveType: {
-      allowNull: false,
-      type: DataTypes.STRING,
-    },
-    comments: {
-      allowNull: false,
-      type: DataTypes.STRING,
-    },
-    status: {
-      allowNull: false,
-      type: DataTypes.INTEGER,
     },
     createdAt: {
       allowNull: false,

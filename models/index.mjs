@@ -5,6 +5,7 @@ import allConfig from '../config/config.js';
 import requestModel from './request.mjs';
 import userModel from './user.mjs';
 import leaveModel from './leave.mjs';
+import relationshipModel from './relationship.mjs';
 
 const env = process.env.NODE_ENV || 'development';
 
@@ -37,15 +38,17 @@ if (env === 'production') {
 db.Request = requestModel(sequelize, Sequelize.DataTypes);
 db.Leave = leaveModel(sequelize, Sequelize.DataTypes);
 db.User = userModel(sequelize, Sequelize.DataTypes);
+db.Relationship = relationshipModel(sequelize, Sequelize.DataTypes);
 
-db.User.belongsTo(db.Request);
-db.Request.hasMany(db.User);
+db.Request.belongsTo(db.User);
+db.User.hasMany(db.Request);
 
-db.User.belongsTo(db.Leave);
-db.Leave.hasMany(db.User);
+db.Leave.belongsTo(db.User);
+db.User.hasMany(db.Leave);
 
 // in order for the many-to-many to work we must mention the join table here.
-db.User.belongsToMany(db.User, { through: 'member_leader' });
+db.User.belongsToMany(db.User, { as: 'Approver', foreignKey: 'approverId', through: 'relationship' });
+db.User.belongsToMany(db.User, { as: 'Member', foreignKey: 'memberId', through: 'relationship' });
 
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;

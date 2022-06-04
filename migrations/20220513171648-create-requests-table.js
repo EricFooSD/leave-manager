@@ -7,7 +7,7 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER,
       },
-      member_id: {
+      user_id: {
         allowNull: false,
         type: Sequelize.INTEGER,
         references: {
@@ -24,6 +24,10 @@ module.exports = {
         },
       },
       dates: {
+        allowNull: false,
+        type: Sequelize.STRING,
+      },
+      leave_type: {
         allowNull: false,
         type: Sequelize.STRING,
       },

@@ -18,6 +18,10 @@ export default function userModel(sequelize, DataTypes) {
       allowNull: false,
       type: DataTypes.INTEGER,
     },
+    picture: {
+      allowNull: false,
+      type: DataTypes.STRING,
+    },
     createdAt: {
       allowNull: false,
       type: DataTypes.DATE,
