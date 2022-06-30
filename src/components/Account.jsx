@@ -8,6 +8,9 @@ export default function Account({ user, balance }) {
   // ================================
   //       RENDERING OF COMPONENT
   // ================================
+
+  // are all user properties always filled out by the user? Is everything required in the db and on the frontend?
+  // If no, then you could potentially render more than necessary here.
   return (
     <div id="leave-container" className="container-sm">
       <div className="row">
