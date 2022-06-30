@@ -18,6 +18,11 @@ export default function Form({
   //          HELPER FUNCTIONS
   // ================================
 
+
+  // all these handlers can also be omitted by using the following pattern:
+  // <Component onClick={(e) => setDate(e.target.value)}
+  // Instead of using a named handler function, we can use an anonymous function within the onClick and define within the block what it will do.
+  // ^this works like vanilla js click handlers with anonymous functions. element.addEventListener("click", (e) => { ... })
   const handleChangeDate = (event) => {
     const newDate = event.target.value;
     setDate(newDate);
@@ -41,20 +46,24 @@ export default function Form({
         user, date, leaveType, comment,
       })
       .then((response) => {
+        // console logs should be removed for production
         console.log('request created in DB');
         toggleForm();
         // get updated list of requests
         axios
           .post('/getRequests', user)
           .then((response2) => {
+            // what is data is undefined? what if [0] index is undefined?
             updateRequestList(response2.data.allExistingRequests[0]);
             // get updated leave balance
             axios
               .post('/getLeavebalance', user)
               .then((response3) => {
+                // what if data or leaveBalance is undefined?
                 updateBalance({ ...response3.data.leaveBalance.balance }); });
           });
       })
+      // if all we do is log the error, the client will not get any feedback. Could get a bit creative here with error messages being displayed to the user.
       .catch((error) => { console.log(error); });
   };
 
@@ -69,6 +78,7 @@ export default function Form({
         </div>
         <div className="input-group">
           <select id="leave-input" type="text" placeholder="Type of Leave" className="form-select" value={leaveType} onChange={handleChangeLeaveType}>
+            {/* Could refactor the options also into a function if you wanted to. Make a list of the values and strings, then iterate over it and return JSX for each. */}         
             <option>Please Choose Type of Leave</option>
             <option value="AL">Annual Leave</option>
             <option value="SL">Sick Leave</option>

@@ -37,6 +37,13 @@ export default function LoginForm({
         if (response.data.status && response.data.user.role === 1) {
           updateUser(response.data.user);
           // get leave balance of member
+          // instead of these nested API calls, I think we could rather attach includes to our request or since we know on login we will want to attach the leave balance and requests, might as well just attach it.
+          // Response:
+          // { User, LeaveBalance, Requests }
+          // If you wanted to dynamically add these includes, maybe because multiple components query the same route, you could include it in your request:
+          // POST /attemptLogin?include=[LeaveBalance]
+          // then in our API you pick that up
+          // Sequelize.User.find({ include: [...request.params.include]}) or something along these lines.
           axios
             .post('/getLeavebalance', response.data.user)
             .then((response2) => {

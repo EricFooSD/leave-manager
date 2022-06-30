@@ -10,6 +10,16 @@ export default function Table({
 }) {
 // helper functions
   const nameOfLeave = (type) => {
+    // I think a switch statement would work a bit nicer or even better an object.
+    /* 
+      const leaveTypes = {
+        AL: 'Annual Leave',
+        CL: 'Childcare Leave',
+      }
+
+      leaveTypes[type] // if type is AL should be 'Annual Leave', if no match then undefined, which you could make an Error then.
+    
+    */
     if (type === 'AL') {
       return 'Annual Leave';
     }
@@ -61,6 +71,13 @@ export default function Table({
   };
 
   const updateRequest = (leaveRequest, newStatus) => {
+    // instead of always importing axios everywhere, you could define a POST, GET, PUT etc. function
+    /* const postRequest = async (url, payload) => {
+          const response = await axios.post(url, payload);
+          return response;
+    } 
+    That way you avoid repeating yourself over and over.
+    */
     axios
     // posting to Bill DB
       .post('/updateRequest', { leaveRequest, newStatus })
@@ -140,6 +157,7 @@ export default function Table({
             <h2>All Requests</h2>
           </div>
           <div className="col-12" id="newtable">
+            {/* Using tables is quite oldschool. Nowadays flex and/or grid is advised */}
             <table className="table table-striped table-bordered table-hover table-sm align-middle table-responsive">
               <thead>
                 <tr className="table-dark">
